@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "outDir": "dist",
+        "lib": ["ES2015"],
+        "target": "ES5",
+        "paths": {
+            "@*": ["./src/*"]
+        }
+    },
+    "files": ["src/lib/index.js", "src/algorithms/index.js"],
+    "exclude": ["dist/*"]
+}
