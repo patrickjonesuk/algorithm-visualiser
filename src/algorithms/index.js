@@ -1,2 +1,1 @@
-
-export * from './sorting/bubble_sort';
+export * from "./sorting/bubble_sort";

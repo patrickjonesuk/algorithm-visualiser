@@ -1,12 +1,11 @@
-
-export * from './algorithm';
-export * from './step';
+export * from "./algorithm";
+export * from "./step";
 
 /**
  * @readonly
  * @enum {boolean}
  */
 export const Direction = {
-    ASCENDING: true,
-    DESCENDING: false,
+  ASCENDING: true,
+  DESCENDING: false,
 };

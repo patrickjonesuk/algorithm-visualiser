@@ -1,14 +1,22 @@
-import { Algorithm } from '@/lib/models';
-import { ListAlgorithmStep } from './step';
+import { Algorithm } from "@/lib/models";
+import { ListItem } from "./step";
 
 export class ListAlgorithm extends Algorithm {
+  constructor() {
+    super();
 
     /**
-     * @param {Number} level 
-     * @returns {ListAlgorithmStep} step
+     * the list of numbers being sorted, in their current order.
+     * @type {ListItem[][]}
+     * @public
      */
-    step(level) {
-        return new ListAlgorithmStep([]);
-    }
+    this.lists = [[]];
 
+    /**
+     * The index of the list that is currently being used.
+     * @type {Number}
+     * @public
+     */
+    this.list_idx = 0;
+  }
 }

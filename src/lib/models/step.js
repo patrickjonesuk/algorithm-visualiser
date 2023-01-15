@@ -1,12 +1,10 @@
-import { Operation } from './operation';
+import { Operation } from "./operation";
 
 export class Step {
-
-    /**
-     * @param {Operation[]} operations 
-     */
-    constructor(operations) {
-        this.operations = operations;
-
-    }
+  /**
+   * @param {Operation[]} operations
+   */
+  constructor(operations) {
+    this.operations = operations;
+  }
 }

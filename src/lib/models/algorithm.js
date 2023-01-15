@@ -1,25 +1,19 @@
-import { Step } from '@/lib/models';
-import { InputContainer } from '@/lib/input';
-
 export class Algorithm {
-    
-    /**
-     * @param {InputContainer} inputContainer
-     */
-    constructor(inputContainer) {
-        this.inputContainer = inputContainer;
-    }
+  /**
+   * @property {Number} operations;
+   * @property {Number} iterations;
+   */
+  constructor() {
+    this.operations = 0;
+    this.iterations = 0;
+  }
 
-    setup() {
-        
-    }
+  setup() {}
 
-    /**
-     * @param {Number} level
-     * @returns {Step}
-     */
-    step(level) {
-        return 0;
-    }
-
+  /**
+   * @param {Number} level
+   */
+  step(level) {
+    return;
+  }
 }
