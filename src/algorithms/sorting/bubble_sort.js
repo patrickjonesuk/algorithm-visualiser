@@ -1,4 +1,5 @@
 import {
+  Direction, // eslint-disable-line no-unused-vars
   ListAlgorithm,
   ListAlgorithmOperation,
   ListItem,
@@ -21,13 +22,12 @@ import { compare } from "mathjs";
  */
 export class BubbleSort extends ListAlgorithm {
   /**
-   * @param {Number} level
+   * @param {Level} level
    */
   step(level) {
     if (level === Level.ALGORITHM) {
       while (!this.complete) this.step(Level.ITERATION);
-    }
-    if (level === Level.ITERATION) {
+    } else if (level === Level.ITERATION) {
       const start_idx = this.list_idx;
       while (start_idx === this.list_idx && !this.complete)
         this.step(Level.OPERATION);
@@ -35,6 +35,7 @@ export class BubbleSort extends ListAlgorithm {
     if (this.idx === this.list.length - 1) {
       if (this.swaps === 0) {
         this.complete = true;
+        return;
       }
       this.lists.push(
         this.list.map(
@@ -90,10 +91,7 @@ export class BubbleSort extends ListAlgorithm {
     });
     if (delta > 0 === this.direction) {
       const [newA, newB] = [a, b].map((item, idx) => {
-        item.highlight = new Highlight(
-          HighlightColour.SECONDARY,
-          Border.none()
-        );
+        item.highlight = new Highlight(HighlightColour.SUCCESS, Border.none());
         item.tooltip = new Tooltip(
           "Items in wrong order, swapping",
           HighlightColour.INFO,
@@ -113,14 +111,6 @@ export class BubbleSort extends ListAlgorithm {
   }
 
   /**
-   * Get the current list.
-   * @returns {ListItem[]}
-   */
-  get list() {
-    return this.lists[this.list_idx];
-  }
-
-  /**
    * @returns {ListItem[][]}
    */
   copyLists() {
@@ -128,7 +118,7 @@ export class BubbleSort extends ListAlgorithm {
   }
 
   /**
-   * @param {boolean} direction
+   * @param {Direction} direction
    */
   constructor(direction) {
     super();
@@ -137,14 +127,14 @@ export class BubbleSort extends ListAlgorithm {
 
     /**
      * the index of the first number of the next pair to compare.
-     * @type {number}
+     * @type {Number}
      * @public
      */
     this.idx = 0;
 
     /**
      * the number of full passes completed.
-     * @type {number}
+     * @type {Number}
      * @public
      */
     this.num_passes = 0;
@@ -152,11 +142,8 @@ export class BubbleSort extends ListAlgorithm {
     /** @type {boolean} */
     this.comparing = false;
 
-    /** @type {number} */
+    /** @type {Number} */
     this.swaps = 0;
-
-    /** @type {boolean} */
-    this.complete = false;
   }
 
   /**

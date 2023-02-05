@@ -1,16 +1,16 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "checkJs": true,
-        "module": "ESNext",
-        "moduleResolution": "Node",
-        "outDir": "dist",
-        "lib": ["ES2016"],
-        "target": "ES5",
-        "paths": {
-            "@*": ["./src/*"]
-        }
-    },
-    "files": ["src/lib/index.js", "src/algorithms/index.js"],
-    "exclude": ["dist/*"]
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "lib": ["ES2016", "dom"],
+    "target": "ES5",
+    "paths": {
+      "@*": ["./src/*"]
+    }
+  },
+  "files": ["src/lib/index.js", "src/algorithms/index.js"],
+  "exclude": ["dist/*"]
 }

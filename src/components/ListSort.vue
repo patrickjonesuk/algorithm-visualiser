@@ -23,7 +23,10 @@
             class="list-item centre-content"
             v-for="item in list"
             :key="item.id"
-            :style="{ background: item.highlight.fill_colour.rgb_hex_string }"
+            :style="{
+              background: item.highlight.fill_colour.rgb_hex_string,
+              border: item.highlight.border.css_string,
+            }"
           >
             <NumberDisplay :number="item.value" />
           </div>
@@ -49,7 +52,10 @@
           :tooltip="item.tooltip"
           v-for="item in sort.list"
           :key="item.id"
-          :style="{ background: item.highlight.fill_colour.rgb_hex_string }"
+          :style="{
+            background: item.highlight.fill_colour.rgb_hex_string,
+            border: item.highlight.border.css_string,
+          }"
         >
           <NumberDisplay :number="item.value" />
         </ToolTip>
@@ -75,15 +81,16 @@ import { Level } from "@/lib";
 import ControlPanel from "./control/ControlPanel.vue";
 import ToolTip from "./ui/ToolTip.vue";
 import NumberDisplay from "./ui/NumberDisplay.vue";
+import { QuickSort } from "../algorithms";
 
 export default {
-  props: ["numbers", "direction"],
+  props: ["numbers", "direction", "sortclass"],
   data() {
     return {
       /**
-            @type {BubbleSort}
+            @type {QuickSort}
             */
-      sort: new BubbleSort(this.direction),
+      sort: new this.sortclass(this.direction),
       animating: false,
       currentList: [],
     };
@@ -135,7 +142,7 @@ export default {
   },
   methods: {
     setList() {
-      this.sort = new BubbleSort(this.direction);
+      this.sort = new this.sortclass(this.direction);
       this.sort.data(this.numbers);
       this.currentList = this.sort.list;
     },
@@ -219,6 +226,7 @@ export default {
   display: grid;
   grid-template-columns: max(5rem, 5%) auto;
   grid-template-rows: repeat(auto-fit, 120px);
+  overflow-x: auto;
   /* overflow: visible; */
   /* min-height: 100%; */
   /* overflow: auto; */

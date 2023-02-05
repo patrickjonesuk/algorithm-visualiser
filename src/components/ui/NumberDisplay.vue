@@ -1,9 +1,13 @@
 <template>
-  <span v-if="typeof number === 'number'">{{ number }}</span>
-  <div v-else class="frac">
-    <span>{{ number.n }}</span>
-    <span class="symbol">/</span>
-    <span class="bottom">{{ number.d }}</span>
+  <div class="number-display">
+    <span v-if="typeof number === 'number'">{{
+      isNaN(number) ? "" : number
+    }}</span>
+    <div v-else class="frac">
+      <span>{{ number.n }}</span>
+      <span class="symbol">/</span>
+      <span class="bottom">{{ number.d }}</span>
+    </div>
   </div>
 </template>
 
@@ -30,5 +34,10 @@ export default {
 }
 .frac span.symbol {
   display: none;
+}
+.number-display {
+  background-color: var(--rgbHeader);
+  padding: 0.8rem;
+  border-radius: 1rem;
 }
 </style>

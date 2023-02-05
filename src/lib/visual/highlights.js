@@ -22,10 +22,15 @@ export class Border {
   /**
    * @param {Colour} colour
    * @param {Number} width
+   * @param {string} unit
+   * @param {string} style
    */
-  constructor(colour, width) {
+  constructor(colour, width, unit = "px", style = "solid") {
     this.colour = colour;
     this.width = width;
+    this.unit = unit;
+    this.style = style;
+    this.css_string = `${width}${unit} ${style} ${colour.rgb_hex_string}`;
   }
 
   /**

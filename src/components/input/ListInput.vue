@@ -24,15 +24,18 @@
       &#10060;
     </button>
   </div>
-  <button @click="start">start</button>
-  <button @click="reset">Reset</button>
+  <div class="btn-container">
+    <UIButton class="btn" @click="start">start</UIButton>
+    <UIButton class="btn" @click="reset">Reset</UIButton>
+  </div>
 </template>
 
 <script>
 import NumberInput from "./NumberInput.vue";
+import UIButton from "../ui/UIButton.vue";
 export default {
   emits: ["start"],
-  components: { NumberInput },
+  components: { NumberInput, UIButton },
   props: {
     inputs: {
       default: [
@@ -78,7 +81,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
   margin: 1rem;
   padding: 1rem;
@@ -112,7 +115,14 @@ button {
   border-radius: 0.5rem;
   border-color: var(--rgbLine);
 }
-span {
-  /* font-size: xx-large; */
+.btn-container {
+  display: inline;
+}
+.btn {
+  margin: 1rem;
+  padding: 0.5rem;
+}
+.btn:first-child {
+  margin-right: 0;
 }
 </style>

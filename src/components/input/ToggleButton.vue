@@ -1,9 +1,11 @@
 <template>
-  <button @click="click">{{ options[idx] }}</button>
+  <UIButton @click="click">{{ options[idx] }}</UIButton>
 </template>
 
 <script>
+import UIButton from "../ui/UIButton.vue";
 export default {
+  components: { UIButton },
   props: {
     options: {
       type: Array,
@@ -26,17 +28,4 @@ export default {
 };
 </script>
 
-<style scoped>
-button {
-  margin-top: 0.5rem;
-  background-color: var(--rgbHeader);
-  border: 1px solid var(--rgbLine);
-  border-radius: 5px;
-  padding: 0.5rem;
-  transition: 0.3s ease-in-out;
-}
-button:hover,
-button:disabled {
-  filter: brightness(75%);
-}
-</style>
+<style scoped></style>

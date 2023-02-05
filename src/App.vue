@@ -1,13 +1,13 @@
 <template>
-  <Header />
+  <HeaderPanel />
   <RouterView />
 </template>
 
 <script>
 import { RouterView } from "vue-router";
-import Header from "./components/ui/Header.vue";
+import HeaderPanel from "./components/ui/HeaderPanel.vue";
 export default {
-  components: { Header, RouterView },
+  components: { HeaderPanel, RouterView },
 };
 </script>
 

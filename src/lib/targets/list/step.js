@@ -29,6 +29,10 @@ export class ListItem {
   static valueOnly(value) {
     return new ListItem(value, Highlight.none(), Tooltip.none());
   }
+
+  static nan() {
+    return ListItem.valueOnly(NaN);
+  }
 }
 
 export class ListAlgorithmOperation extends Operation {
