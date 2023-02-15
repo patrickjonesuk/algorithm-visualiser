@@ -12,28 +12,32 @@
         {{ btn.label }}
       </button>
     </div>
+    <div class="stats" v-if="Object.keys(stats).length !== 0">
+      <span v-for="stat in Object.keys(stats)" :key="stat">
+        {{ stat }}: {{ stats[stat] }}<br />
+        <hr />
+      </span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["buttons"],
-  computed: {
-    gridStyle() {
-      return {
-        gridTemplateColumns: `repeat(${this.buttons.length}, minmax(100px 1fr))`,
-      };
-    },
-  },
+  props: ["buttons", "stats"],
 };
 </script>
 
 <style>
+
+.stats {
+  border: 0.15rem solid var(--rgbLine);
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
 .panel-root {
   background-color: var(--rgbHeader);
-  display: grid;
   padding: 1rem;
-  grid-template-rows: 3rem auto;
   max-width: 15rem;
 }
 .buttons {

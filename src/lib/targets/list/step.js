@@ -1,39 +1,9 @@
-import { Step, Operation } from "@/lib/models";
-import { Highlight, Tooltip } from "@/lib/visual";
+import { Step, Operation, OperationItem } from "@/lib/models";
 
-export class ListItem {
-  /**
-   * @param {Number} value
-   * @param {Highlight} highlight
-   * @param {Tooltip} tooltip
-   * @param {string} animation
-   */
-  constructor(value, highlight, tooltip, animation = "") {
-    this.value = value;
-    this.highlight = highlight;
-    this.tooltip = tooltip;
-    this.animation = animation;
-
-    /**
-     * Random ID.
-     * @type {Number}
-     */
-    this.id = Math.random();
-  }
-
-  /**
-   * Create a list item with only a value, and no additional formatting.
-   * @param {Number} value
-   * @returns {ListItem}
-   */
-  static valueOnly(value) {
-    return new ListItem(value, Highlight.none(), Tooltip.none());
-  }
-
-  static nan() {
-    return ListItem.valueOnly(NaN);
-  }
-}
+/**
+ * @extends OperationItem<Number>
+ */
+export class ListItem extends OperationItem {}
 
 export class ListAlgorithmOperation extends Operation {
   /**

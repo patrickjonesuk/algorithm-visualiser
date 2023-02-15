@@ -39,8 +39,7 @@ export class BubbleSort extends ListAlgorithm {
       }
       this.lists.push(
         this.list.map(
-          (item) =>
-            new ListItem(item.value, Highlight.none(), Tooltip.none(), "")
+          (item) => new ListItem(item.value, Highlight.none(), Tooltip.none())
         )
       );
       this.list_idx++;
@@ -61,7 +60,6 @@ export class BubbleSort extends ListAlgorithm {
             Border.none()
           ))
       );
-      [0, 1].forEach((idx) => (this.list[this.idx + idx].animation = ""));
       [0, 1].forEach(
         (idx) =>
           (this.list[this.idx + idx].tooltip = new Tooltip(
@@ -87,7 +85,6 @@ export class BubbleSort extends ListAlgorithm {
     this.list.forEach((item) => {
       item.tooltip = Tooltip.none();
       item.highlight = Highlight.none();
-      item.animation = "";
     });
     if (delta > 0 === this.direction) {
       const [newA, newB] = [a, b].map((item, idx) => {
@@ -97,7 +94,6 @@ export class BubbleSort extends ListAlgorithm {
           HighlightColour.INFO,
           Border.none()
         );
-        item.animation = Animation.List[`ANIMATE_${["RIGHT", "LEFT"][idx]}`];
         return item;
       });
       this.list[this.idx++] = newB;

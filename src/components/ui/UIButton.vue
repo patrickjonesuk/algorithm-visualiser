@@ -3,12 +3,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    button_style: {
+      default: { "margin-top": ".5rem" },
+    },
+  },
+};
 </script>
 
 <style scoped>
 button {
-  margin-top: 0.5rem;
   margin-right: 1rem;
   background-color: var(--rgbHeader);
   border: 1px solid var(--rgbLine);

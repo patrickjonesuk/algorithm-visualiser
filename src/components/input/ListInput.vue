@@ -27,6 +27,21 @@
   <div class="btn-container">
     <UIButton class="btn" @click="start">start</UIButton>
     <UIButton class="btn" @click="reset">Reset</UIButton>
+    <UIButton
+      class="btn"
+      @click="
+        [10, 12, 9, 8, 7, 6, 5, 4, 3, 20, 2, 1, 15, 18].forEach((x) =>
+          this.inputs.push({
+            fraction: false,
+            numerator: x,
+            denominator: null,
+            value: x,
+          })
+        );
+        this.inputs.shift();
+      "
+      >Test data</UIButton
+    >
   </div>
 </template>
 
@@ -87,8 +102,7 @@ export default {
   padding: 1rem;
   border: 0.1rem solid var(--rgbLine);
   display: grid;
-  /* grid-template-columns: repeat(auto-fill, max-content); */
-  grid-auto-columns: min-content;
+  grid-template-columns: repeat(auto-fill, 6rem);
   column-gap: 1rem;
   overflow-x: auto;
 }
@@ -104,7 +118,7 @@ export default {
 }
 
 .add-btn {
-  min-width: 15rem;
+  min-width: 6rem;
   grid-row: 1 / 3;
   font-size: xx-large;
 }

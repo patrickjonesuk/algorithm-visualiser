@@ -1,15 +1,21 @@
 <template>
   <div class="fraction-container">
-    <input @input="inputNumerator" class="input numerator" ref="numerator" />
+    <input
+      @input="inputNumerator"
+      class="input numerator"
+      ref="numerator"
+      :style="value.fraction ? { marginBottom: '.25rem' } : {}"
+    />
+    <hr v-if="value.fraction" />
     <input
       @keydown="keyDown"
       @input="inputDenominator"
       class="input denominator"
+      v-show="value.fraction"
       :style="{ opacity: value.fraction ? 1 : 0 }"
       ref="denominator"
       v-model="value.denominator"
     />
-    <hr v-if="value.fraction" />
   </div>
 </template>
 
@@ -70,7 +76,6 @@ export default {
     },
     inputNumerator(evt) {
       if (evt.inputType === "insertText") {
-        /* this.ensureNumberOnly(evt.target, { allow_slash: true }); */
         const lastCharIdx = evt.target.value.length - 1;
         const lastChar = evt.target.value[lastCharIdx];
         const numPoints = evt.target.value.split(".").length - 1;
@@ -78,17 +83,20 @@ export default {
           evt.target.value = evt.target.value.slice(0, lastCharIdx);
           if (numPoints === 0 && lastCharIdx > 0) {
             this.value.fraction = true;
+            this.$refs.denominator.style.removeProperty("display"); // v-show does not update soon enough to allow setting focus here.
             this.$refs.denominator.focus();
           }
           return;
         }
-        const matchRe = numPoints == 1 && lastCharIdx > 0 ? /[0-9.]/ : /[0-9]/;
+        const matchRe =
+          lastCharIdx > 0 ? (numPoints === 1 ? /[0-9.]/ : /[0-9]/) : /[0-9\-]/;
         if (!lastChar.match(matchRe)) {
           evt.target.value = evt.target.value.slice(0, lastCharIdx);
         }
       }
       this.value.numerator = evt.target.value;
     },
+
     inputDenominator(evt) {
       if (evt.target.value === "") {
         this.value.fraction = false;
@@ -102,9 +110,6 @@ export default {
           evt.target.value = evt.target.value.slice(0, lastCharIdx);
       }
 
-      /* } else { */
-      /*     this.ensureNumberOnly(evt.target) */
-      /* } */
       this.value.denominator = evt.target.value;
     },
 
@@ -130,29 +135,29 @@ export default {
 </script>
 
 <style>
+.fraction-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  align-items: start;
+}
+
+.input:last-child {
+  margin-top: 0.25rem;
+}
+
 .input {
   padding: 1rem;
   border-radius: 0.5rem;
   background-color: var(--rgbHeader);
   border-color: var(--rgbLine);
   color: inherit;
-}
-
-.numerator {
-  margin-bottom: 0.2rem;
-  grid-row: 1;
+  text-align: center;
+  width: 6rem;
 }
 hr {
-  grid-row: 2;
-}
-.denominator {
-  margin-top: 0.1rem;
-  grid-row: 3;
+  width: 6rem;
 }
 
-.fraction-container {
-  display: grid;
-  grid-template-rows: auto auto;
-  max-width: 2rem;
-}
 </style>

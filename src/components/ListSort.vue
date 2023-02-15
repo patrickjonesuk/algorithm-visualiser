@@ -1,6 +1,5 @@
 <template>
-  <div class="sort-root">
-    <ControlPanel class="control-panel" :buttons="buttons" />
+  <algorithm-layout :buttons="buttons">
     <TransitionGroup
       :style="heightCss"
       class="list-of-lists"
@@ -44,7 +43,7 @@
         :style="{ 'grid-column': 2, 'grid-row': sort.lists.length }"
         name="list"
         class="list list-current"
-        tag="template"
+        tag="div"
         key="current"
       >
         <ToolTip
@@ -69,30 +68,28 @@
         }"
         key="complete-banner"
       >
-        Algorithm complete
+        {{ sort.end_message }}
       </div>
     </TransitionGroup>
-  </div>
+    <!--</div>-->
+  </algorithm-layout>
 </template>
 
 <script>
-import { BubbleSort } from "@/algorithms";
-import { Level } from "@/lib";
+import { Level, ListAlgorithm } from "@/lib";
 import ControlPanel from "./control/ControlPanel.vue";
 import ToolTip from "./ui/ToolTip.vue";
 import NumberDisplay from "./ui/NumberDisplay.vue";
-import { QuickSort } from "../algorithms";
+import AlgorithmLayout from "./ui/AlgorithmLayout.vue";
 
 export default {
   props: ["numbers", "direction", "sortclass"],
   data() {
     return {
       /**
-            @type {QuickSort}
-            */
+        @type {ListAlgorithm}
+       */
       sort: new this.sortclass(this.direction),
-      animating: false,
-      currentList: [],
     };
   },
   computed: {
@@ -144,21 +141,16 @@ export default {
     setList() {
       this.sort = new this.sortclass(this.direction);
       this.sort.data(this.numbers);
-      this.currentList = this.sort.list;
     },
   },
   mounted() {
     this.setList();
   },
-  components: { ControlPanel, ToolTip, NumberDisplay },
+  components: { ControlPanel, ToolTip, NumberDisplay, AlgorithmLayout },
 };
 </script>
 
 <style scoped>
-.list-container {
-  display: block;
-}
-
 .list-move {
   transition: all 0.5s;
 }
@@ -209,15 +201,8 @@ export default {
 
 .sort-root {
   padding-right: 2rem;
-  /* padding-left: 1rem; */
   display: grid;
-  /* grid-template-columns: 20% auto; */
   grid-template-columns: minmax(150px, max-content) auto;
-
-  /* left: 1rem; */
-  /* right: 1rem; */
-  /* top: 1rem; */
-  /* min-height: 75vh; */
 
   inset: 2vh;
   min-height: 86vh;
@@ -226,10 +211,7 @@ export default {
   display: grid;
   grid-template-columns: max(5rem, 5%) auto;
   grid-template-rows: repeat(auto-fit, 120px);
-  overflow-x: auto;
-  /* overflow: visible; */
-  /* min-height: 100%; */
-  /* overflow: auto; */
+  padding-left: 0;
 }
 .control-panel {
   grid-column: 1;

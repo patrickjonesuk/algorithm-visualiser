@@ -24,14 +24,6 @@ import ToggleButton from "../components/input/ToggleButton.vue";
     :direction="!direction"
     :sortclass="[BubbleSort, QuickSort][sortclass]"
   />
-  <!--
-  <BubbleSort
-    v-else
-    :numbers="numbers"
-    @new="stage = 0"
-    :direction="!direction"
-  />
-  -->
 </template>
 
 <script>

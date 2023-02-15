@@ -12,6 +12,7 @@ export default {
     },
     start_idx: {
       type: Number,
+      default: 0,
     },
   },
   data() {
