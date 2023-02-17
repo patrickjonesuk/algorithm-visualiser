@@ -59,8 +59,7 @@ export default {
   emits: ["start"],
   props: ["state"],
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     varNames() {
@@ -83,14 +82,12 @@ export default {
       );
     },
     createCoeffs() {
-      return new Array(VARIABLE_NAMES.length)
-        .fill()
-        .map((_) => ({
-          numerator: 0,
-          denominator: null,
-          value: 0,
-          fraction: false,
-        }));
+      return new Array(VARIABLE_NAMES.length).fill().map((_) => ({
+        numerator: 0,
+        denominator: null,
+        value: 0,
+        fraction: false,
+      }));
     },
   },
   created() {

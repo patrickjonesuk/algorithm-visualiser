@@ -23,7 +23,6 @@ export default {
 </script>
 
 <style scoped>
-
 .root {
   padding-right: 2rem;
   display: grid;

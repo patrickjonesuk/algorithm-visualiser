@@ -12,6 +12,12 @@ export class Table {
   static empty() {
     return new Table([]);
   }
+
+  copyValues() {
+    return new Table(
+      this.rows.map((row) => row.map(({ value }) => TableItem.valueOnly(value)))
+    );
+  }
 }
 
 export class TableAlgorithm extends Algorithm {

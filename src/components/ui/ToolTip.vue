@@ -8,7 +8,6 @@
       @click="toggled = !toggled"
     >
       <slot></slot>
-
     </div>
   </div>
 </template>
@@ -83,5 +82,4 @@ export default {
   bottom: 105%;
   opacity: 1;
 }
-
 </style>

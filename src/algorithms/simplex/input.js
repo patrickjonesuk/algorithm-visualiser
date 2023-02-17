@@ -2,7 +2,6 @@ import { Inequality } from "./inequalities";
 
 export class SimplexInputState {
   constructor() {
-
     this.input_inequalities = [];
     this.input_objective = [];
 

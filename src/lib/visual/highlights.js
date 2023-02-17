@@ -34,6 +34,14 @@ export class Border {
   }
 
   /**
+   * @param {string} default_css
+   * @returns {string}
+   */
+  orDefault(default_css) {
+    return this.width === 0 ? default_css : this.css_string;
+  }
+
+  /**
    * Returns an empty (null) border
    * @returns {Border}
    */
@@ -81,4 +89,3 @@ export class Tooltip {
     return new Tooltip("", Colour.none(), Border.none());
   }
 }
-

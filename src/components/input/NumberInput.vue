@@ -159,5 +159,4 @@ export default {
 hr {
   width: 6rem;
 }
-
 </style>

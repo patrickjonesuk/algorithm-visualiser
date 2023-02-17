@@ -28,7 +28,6 @@ export default {
 </script>
 
 <style>
-
 .stats {
   border: 0.15rem solid var(--rgbLine);
   margin-top: 1rem;

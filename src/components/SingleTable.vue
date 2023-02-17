@@ -1,8 +1,8 @@
 <template>
-  <algorithm-layout :buttons="buttons" :stats="simplex.stats">
+  <algorithm-layout :buttons="buttons" :stats="algorithm.stats">
     <transition-group class="list-of-tables" name="listOfTables" tag="ul">
       <transition-group
-        v-for="(table, i) in this.simplex.tables"
+        v-for="(table, i) in this.algorithm.tables"
         tag="table"
         :key="i"
         class="table"
@@ -10,36 +10,49 @@
         <tbody name="transition-table" :key="'table'">
           <tr v-for="(row, idx) in table.rows" :key="idx">
             <template v-if="idx == 0">
+              <th v-if="row_headers"></th>
               <th v-for="item in row" :key="item.id">
-                {{ item.value }}
+                <ToolTip :tooltip="item.tooltip">
+                  {{ item.value }}
+                </ToolTip>
               </th>
             </template>
-            <td
-              v-for="item in row"
-              :key="item.id"
-              :style="{ background: item.highlight.fill_colour.rgb_hex_string }"
-              v-else
-            >
-              <ToolTip :tooltip="item.tooltip">
-                <NumberDisplay :number="item.value" />
-              </ToolTip>
-            </td>
+            <template v-else>
+              <th v-if="row_headers">
+                <ToolTip :tooltip="row[0].tooltip">
+                  {{ row[0].value }}
+                </ToolTip>
+              </th>
+              <td
+                v-for="item in row_headers ? row.slice(1) : row"
+                :key="item.id"
+                :style="{
+                  background: item.highlight.fill_colour.rgb_hex_string,
+                  border: item.highlight.border.orDefault(
+                    '1px solid var(--rgbLine)'
+                  ),
+                }"
+              >
+                <ToolTip :tooltip="item.tooltip">
+                  <NumberDisplay :number="item.value" />
+                </ToolTip>
+              </td>
+            </template>
           </tr>
         </tbody>
       </transition-group>
       <div
         v-if="complete"
         key="complete-banner"
-        :class="`${simplex.failed ? 'failure' : 'complete'}-banner`"
+        :class="`${algorithm.failed ? 'failure' : 'complete'}-banner`"
       >
-        {{ simplex.end_message }}
+        {{ algorithm.end_message }}
       </div>
     </transition-group>
   </algorithm-layout>
 </template>
 
 <script>
-import { SimplexAlgorithm } from "../algorithms";
 import NumberDisplay from "./ui/NumberDisplay.vue";
 import ControlPanel from "./control/ControlPanel.vue";
 import { Level } from "../lib";
@@ -47,42 +60,38 @@ import AlgorithmLayout from "./ui/AlgorithmLayout.vue";
 import ToolTip from "./ui/ToolTip.vue";
 
 export default {
-  props: ["objective", "inequalities", "num_vars"],
-  data() {
-    return {
-      simplex: new SimplexAlgorithm(
-        this.num_vars,
-        this.objective,
-        this.inequalities
-      ),
-    };
+  props: {
+    algorithm: {},
+    row_headers: {
+      default: false,
+    },
   },
   computed: {
     buttons() {
       return [
         {
-          func: () => this.simplex.step(Level.OPERATION),
+          func: () => this.algorithm.step(Level.OPERATION),
           label: "step",
           bind: {
             disabled: this.complete,
           },
         },
         {
-          func: () => this.simplex.step(Level.ITERATION),
+          func: () => this.algorithm.step(Level.ITERATION),
           label: "iteration",
           bind: {
             disabled: this.complete,
           },
         },
         {
-          func: () => this.simplex.step(Level.ALGORITHM),
+          func: () => this.algorithm.step(Level.ALGORITHM),
           label: "complete",
           bind: {
             disabled: this.complete,
           },
         },
         {
-          func: this.reset,
+          func: () => this.algorithm.reset(),
           label: "reset",
           bind: {},
         },
@@ -94,16 +103,7 @@ export default {
       ];
     },
     complete() {
-      return this.simplex.complete;
-    },
-  },
-  methods: {
-    reset() {
-      this.simplex = new SimplexAlgorithm(
-        this.num_vars,
-        this.objective,
-        this.inequalities
-      );
+      return this.algorithm.complete;
     },
   },
   components: {

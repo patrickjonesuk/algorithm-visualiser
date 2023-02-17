@@ -20,16 +20,9 @@ import {
   VALUE_COL_NAME,
   VARIABLE_NAMES,
 } from "./constants";
-import {
-  Inequality,
-  InequalityDirection,
-  InequalityState,
-} from "./inequalities";
+import { Inequality, InequalityState } from "./inequalities";
 import { create, all } from "mathjs";
-
-/**
- * @typedef {import("mathjs").Fraction} Fraction
- */
+import { SimplexInputState } from "./input";
 
 export class SimplexAlgorithm extends SingleTableAlgorithm {
   /**
@@ -430,5 +423,18 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
     // @ts-ignore mathjs type system uses a strange mix of {MathType} and {number | Fraction}
     // meaning that while this is completely type-safe, typescript will insist that it's not.
     return this.math.fraction(result);
+  }
+
+  reset() {
+    this.tables = [this.initial_table.copyValues()];
+    this.stage = 1;
+    this.operations = 0;
+    this.iterations = 0;
+    this.table_idx = 0;
+    this.complete = false;
+    this.failed = false;
+    this.pivot_row_idx = -1;
+    this.pivot_column_idx = -1;
+    this.operation_row_idx = -1;
   }
 }

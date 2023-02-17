@@ -1,5 +1,5 @@
 <template>
-  <div class="number-display" :style="paddingCss">
+  <div class="number-display" :style="css">
     <span v-if="typeof number === 'number'">{{
       isNaN(number) ? "" : number
     }}</span>
@@ -52,8 +52,11 @@ export default {
     splitString() {
       return this.parts.length > 1;
     },
-    paddingCss() {
-      return `padding: ${this.padding};`;
+    css() {
+      return {
+        padding: this.padding,
+        visibility: this.number === "" ? "hidden" : "visible",
+      };
     },
   },
 };
