@@ -1,25 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
-import SortView from "../views/SortView.vue";
-import SimplexView from "../views/SimplexView.vue";
-import TableView from "../views/TableView.vue";
+import HomeView from "../views/HomeView.vue";
+import AlgorithmView from "../views/algorithms/AlgorithmView.vue";
+import { algorithmRoutes } from "./algorithms";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/sort",
-      name: "sort",
-      component: SortView,
+      path: "/algorithm",
+      name: "algorithm",
+      component: AlgorithmView,
+      children: algorithmRoutes,
     },
     {
-      path: "/simplex",
-      name: "simplex",
-      component: SimplexView,
-    },
-    {
-      path: "/prim",
-      name: "prim",
-      component: TableView,
+      path: "/",
+      name: "/home",
+      component: HomeView,
     },
   ],
 });

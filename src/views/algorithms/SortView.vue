@@ -1,8 +1,8 @@
 <script setup>
-import { QuickSort, BubbleSort } from "../algorithms";
-import ListSort from "../components/ListSort.vue";
-import ListInput from "../components/input/ListInput.vue";
-import ToggleButton from "../components/input/ToggleButton.vue";
+import { QuickSort, BubbleSort } from "@/algorithms";
+import ListSort from "@/components/ListSort.vue";
+import ListInput from "@/components/input/ListInput.vue";
+import ToggleButton from "@/components/input/ToggleButton.vue";
 </script>
 
 <template>
@@ -12,10 +12,12 @@ import ToggleButton from "../components/input/ToggleButton.vue";
       :options="['ascending', 'descending']"
       v-model:start_idx="direction"
     />
+    <!--
     <ToggleButton
       :options="['Bubble Sort', 'Quick Sort']"
       v-model:start_idx="sortclass"
     />
+    -->
   </div>
   <ListSort
     v-else
@@ -28,12 +30,13 @@ import ToggleButton from "../components/input/ToggleButton.vue";
 
 <script>
 export default {
+  props: ["sortclass"],
   components: [ListSort, ListInput, ToggleButton],
   data() {
     return {
       stage: 0,
       direction: 0,
-      sortclass: 0,
+      /* sortclass: 0, */
       inputs: [
         {
           fraction: false,

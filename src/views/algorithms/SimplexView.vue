@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import SingleTable from "../components/SingleTable.vue";
-import SimplexInput from "../components/input/SimplexInput.vue";
-import { SimplexAlgorithm, SimplexInputState } from "../algorithms";
+import SingleTable from "@/components/SingleTable.vue";
+import SimplexInput from "@/components/input/SimplexInput.vue";
+import { SimplexAlgorithm, SimplexInputState } from "@/algorithms";
 export default {
   components: { SingleTable, SimplexInput },
   data() {

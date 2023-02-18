@@ -120,6 +120,13 @@ table {
   margin: 1rem;
   border-collapse: collapse;
 }
+
+@media only screen and (max-width: 450px) {
+  table {
+    margin: 0;
+  }
+}
+
 table,
 td,
 th {
@@ -173,5 +180,6 @@ table.table {
 
 .list-of-tables {
   overflow-x: scroll;
+  padding-left: 0;
 }
 </style>

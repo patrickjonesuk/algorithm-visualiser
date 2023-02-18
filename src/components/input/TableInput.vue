@@ -70,6 +70,7 @@ export default {
 <style scoped>
 .wrapper {
   margin: 1rem;
+  overflow-x: scroll;
 }
 
 table {

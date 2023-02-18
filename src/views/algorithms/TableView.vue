@@ -17,11 +17,11 @@
 
 <script>
 import TableInput from "@/components/input/TableInput.vue";
-import { Table, TableItem, Tooltip, Highlight } from "../lib";
+import { Table, TableItem, Tooltip, Highlight } from "@/lib";
 import { fractionObjectZero } from "@/lib/utils";
-import { NODE_VAR_NAMES, PrimsAlgorithm } from "../algorithms";
+import { NODE_VAR_NAMES, PrimsAlgorithm } from "@/algorithms";
 import UIButton from "@/components/ui/UIButton.vue";
-import SingleTable from "../components/SingleTable.vue";
+import SingleTable from "@/components/SingleTable.vue";
 export default {
   components: { TableInput, UIButton, SingleTable },
   data() {
