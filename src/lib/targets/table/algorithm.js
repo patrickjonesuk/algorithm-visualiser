@@ -1,24 +1,5 @@
 import { Algorithm } from "@/lib/models";
-import { TableItem } from "./step"; // eslint-disable-line no-unused-vars
-
-export class Table {
-  /**
-   * @param {TableItem[][]} rows
-   */
-  constructor(rows) {
-    this.rows = rows;
-  }
-
-  static empty() {
-    return new Table([]);
-  }
-
-  copyValues() {
-    return new Table(
-      this.rows.map((row) => row.map(({ value }) => TableItem.valueOnly(value)))
-    );
-  }
-}
+import { Table } from "./table";
 
 export class TableAlgorithm extends Algorithm {
   constructor() {

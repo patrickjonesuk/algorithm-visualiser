@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from "@/lib/visual";
 import { byId } from "@/lib";
-import { Level } from "@/lib/levels";
+import { Level } from "@/lib";
 import { compare } from "mathjs";
 
 /**

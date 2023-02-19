@@ -1,17 +1,29 @@
 <template>
   <div class="wrapper">
     <div class="input-container" v-if="!this.stage">
-      <table-input :table="table" @reset="table = newTable()" />
+      <table-input
+        :table="table"
+        @reset="table = newTable()"
+        :allow_infinity="allow_infinity"
+      />
       <div class="control-buttons">
         <UIButton @click="start">Start</UIButton>
       </div>
     </div>
-    <SingleTable
-      v-else
-      :algorithm="prim"
-      @new="this.stage--"
-      :row_headers="true"
-    />
+    <template v-else>
+      <multi-table
+        v-if="multi_table"
+        :algorithm="algorithm"
+        @new="this.stage--"
+        :row_headers="true"
+      />
+      <single-table
+        v-else
+        :algorithm="algorithm"
+        @new="this.stage--"
+        :row_headers="true"
+      />
+    </template>
   </div>
 </template>
 
@@ -19,15 +31,26 @@
 import TableInput from "@/components/input/TableInput.vue";
 import { Table, TableItem, Tooltip, Highlight } from "@/lib";
 import { fractionObjectZero } from "@/lib/utils";
-import { NODE_VAR_NAMES, PrimsAlgorithm } from "@/algorithms";
+import { NODE_VAR_NAMES } from "@/algorithms";
 import UIButton from "@/components/ui/UIButton.vue";
 import SingleTable from "@/components/SingleTable.vue";
+import MultiTable from "@/components/MultiTable.vue";
+
 export default {
-  components: { TableInput, UIButton, SingleTable },
+  components: { TableInput, UIButton, SingleTable, MultiTable },
+  props: {
+    allow_infinity: {
+      default: false,
+    },
+    multi_table: {
+      default: false,
+    },
+    algorithmClass: {},
+  },
   data() {
     return {
       table: this.newTable(),
-      prim: null,
+      algorithm: null,
       stage: 0,
     };
   },
@@ -53,7 +76,7 @@ export default {
       return newTable;
     },
     start() {
-      this.prim = new PrimsAlgorithm(this.processTable());
+      this.algorithm = new this.algorithmClass(this.processTable());
       this.stage++;
     },
   },

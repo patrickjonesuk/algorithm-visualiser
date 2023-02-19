@@ -1,5 +1,8 @@
 import {
   Border,
+  divideToFraction,
+  multiplyToFraction,
+  binaryOperationToFraction,
   Highlight,
   HighlightColour,
   Level,
@@ -22,7 +25,6 @@ import {
 } from "./constants";
 import { Inequality, InequalityState } from "./inequalities";
 import { create, all } from "mathjs";
-import { SimplexInputState } from "./input";
 
 export class SimplexAlgorithm extends SingleTableAlgorithm {
   /**
@@ -65,9 +67,10 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         const thetas = [];
         for (const row of this.table.rows.slice(1, -1)) {
           const a = row[row.length - 3].value;
-          const theta = this.divideToFraction(
+          const theta = divideToFraction(
             a,
-            row[this.pivot_column_idx].value
+            row[this.pivot_column_idx].value,
+            this.math
           );
           thetas.push(theta);
           row[row.length - 2].value = theta;
@@ -89,7 +92,7 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         this.operation_row_idx = 0;
         const pivotRow = this.row(this.pivot_row_idx);
         const valueToOne = pivotRow[this.pivot_column_idx].value;
-        const scalar = this.divideToFraction(1, valueToOne);
+        const scalar = divideToFraction(1, valueToOne, this.math);
         pivotRow[pivotRow.length - 1].value = `R${
           this.pivot_row_idx
         }' -> ||${this.math.format(scalar)}|| R${this.pivot_row_idx}`;
@@ -100,7 +103,7 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         );
         for (const column of pivotRow.slice(1, -2)) {
           const oldValue = column.value;
-          const newValue = this.multiplyToFraction(column.value, scalar);
+          const newValue = multiplyToFraction(column.value, scalar, this.math);
           column.value = newValue;
           column.tooltip = new Tooltip(
             `${oldValue} × ${scalar} = ${newValue}`,
@@ -119,9 +122,10 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         prevRow.forEach((item) => (item.highlight = Highlight.none()));
         const thisRow = this.row(this.operation_row_idx);
         const valueToZero = thisRow[this.pivot_column_idx].value;
-        const scalar = this.divideToFraction(
+        const scalar = divideToFraction(
           this.math.abs(valueToZero),
-          pivotRow[this.pivot_column_idx].value
+          pivotRow[this.pivot_column_idx].value,
+          this.math
         );
         const add = this.math.isNegative(valueToZero);
         thisRow[thisRow.length - 1].value = `R${this.operation_row_idx}' -> R${
@@ -134,16 +138,21 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         );
         const slice = pivotRow.slice(1, -2);
         for (let i = 1; i <= slice.length; i++) {
-          const offset = this.multiplyToFraction(pivotRow[i].value, scalar);
+          const offset = multiplyToFraction(
+            pivotRow[i].value,
+            scalar,
+            this.math
+          );
           const oldValue = thisRow[i].value;
           thisRow[i].highlight = new Highlight(
             HighlightColour.SECONDARY,
             Border.none()
           );
-          const newValue = this.binaryOperationToFraction(
+          const newValue = binaryOperationToFraction(
             oldValue,
             offset,
-            add ? this.math.add : this.math.subtract
+            add ? this.math.add : this.math.subtract,
+            this.math
           );
           thisRow[i].value = newValue;
           thisRow[i].tooltip = new Tooltip(
@@ -243,7 +252,7 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
     this.num_vars = num_vars;
     this.objective = objective
       .slice(0, num_vars)
-      .map((x) => this.multiplyToFraction(x, -1)); // Change from P=ax+by to P-ax-by=0
+      .map((x) => multiplyToFraction(x, -1, this.math)); // Change from P=ax+by to P-ax-by=0
     this.inequalities = inequalities;
     this.inequalities.forEach(
       (ineq) => (ineq.coeffs = ineq.coeffs.slice(0, num_vars))
@@ -389,40 +398,6 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
     return this.table.rows[
       (this.table.rows.length + index) % this.table.rows.length
     ];
-  }
-
-  /**
-   * @param {Number} a
-   * @param {Number} b
-   * @returns {Number}
-   */
-  divideToFraction(a, b) {
-    if (b === 0) return Infinity;
-    return this.binaryOperationToFraction(a, b, this.math.divide);
-  }
-
-  /**
-   * @param {Number} a
-   * @param {Number} b
-   * @returns {Number}
-   */
-  multiplyToFraction(a, b) {
-    return this.binaryOperationToFraction(a, b, this.math.multiply);
-  }
-
-  /**
-   * @param {Number} a
-   * @param {Number} b
-   * @param {Function} operation
-   * @returns {Number}
-   */
-  binaryOperationToFraction(a, b, operation) {
-    const result = operation(a, b);
-    if (this.math.isInteger(result) || this.math.equal(result, 0))
-      return this.math.number(result);
-    // @ts-ignore mathjs type system uses a strange mix of {MathType} and {number | Fraction}
-    // meaning that while this is completely type-safe, typescript will insist that it's not.
-    return this.math.fraction(result);
   }
 
   reset() {

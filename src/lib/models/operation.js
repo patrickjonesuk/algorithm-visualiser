@@ -1,7 +1,5 @@
 import { Highlight, Tooltip } from "@/lib/visual";
 
-export class Operation {}
-
 /**
  * @template T
  */

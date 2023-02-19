@@ -22,13 +22,19 @@
 <script>
 import { fraction } from "mathjs";
 export default {
-  props: ["value"],
+  props: {
+    value: {},
+    allow_infinity: {
+      default: false,
+    },
+  },
 
   data() {
     return {
       fraction: false,
       numerator: this.value,
       denominator: 0,
+      infinity: false,
     };
   },
   mounted() {
@@ -63,6 +69,10 @@ export default {
     valueWatcher(_new) {
       this.$refs.numerator.value = _new.numerator || "";
       this.$refs.denominator.value = _new.denominator || "";
+      if (_new.numerator === Infinity) {
+        this.$refs.numerator.value = "∞";
+        this.infinity = true;
+      }
     },
     keyDown(evt) {
       if (
@@ -78,6 +88,18 @@ export default {
       if (evt.inputType === "insertText") {
         const lastCharIdx = evt.target.value.length - 1;
         const lastChar = evt.target.value[lastCharIdx];
+        if (this.infinity) {
+          evt.target.value = "";
+          this.infinity = false;
+          this.value.numerator = 0;
+          return;
+        }
+        if (lastCharIdx === 0 && lastChar === "i" && this.allow_infinity) {
+          evt.target.value = "∞";
+          this.infinity = true;
+          this.value.numerator = Infinity;
+          return;
+        }
         const numPoints = evt.target.value.split(".").length - 1;
         if (lastChar === "/") {
           evt.target.value = evt.target.value.slice(0, lastCharIdx);

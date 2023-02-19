@@ -21,12 +21,19 @@
             @click="removeRow(i)"
           ></th>
           <td v-for="(item, ri) in row.slice(1)" :key="item.id">
-            <number-input v-if="i !== ri" :value="item.value" />
+            <number-input
+              v-if="i !== ri"
+              :allow_infinity="allow_infinity"
+              :value="item.value"
+            />
             <span v-else>-</span>
           </td>
         </tr>
       </tbody>
     </table>
+    <span v-if="allow_infinity">
+      Press 'i' to insert a value of Infinity.<br />
+    </span>
     <UIButton class="btn" @click="newRow">+</UIButton>
     <UIButton class="btn" @click="$emit('reset')">Reset</UIButton>
   </div>
@@ -39,7 +46,12 @@ import { NODE_VAR_NAMES } from "@/algorithms";
 import NumberInput from "./NumberInput.vue";
 export default {
   components: { UIButton, NumberInput },
-  props: ["table"],
+  props: {
+    table: {},
+    allow_infinity: {
+      default: false,
+    },
+  },
   methods: {
     newRow() {
       const newVarName = NODE_VAR_NAMES[this.table.rows[0].length];

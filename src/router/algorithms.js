@@ -1,6 +1,7 @@
 import SortView from "../views/algorithms/SortView.vue";
 import SimplexView from "../views/algorithms/SimplexView.vue";
 import TableView from "../views/algorithms/TableView.vue";
+import { PrimsAlgorithm, FloydsAlgorithm } from "@/algorithms";
 
 const sortRoutes = ["Bubble", "Quick"].map((name, i) => ({
   path: `sort/${name.toLowerCase()}_sort`,
@@ -14,8 +15,36 @@ const sortRoutes = ["Bubble", "Quick"].map((name, i) => ({
   },
 }));
 
+const graphRoutes = [
+  {
+    path: "graph/prim",
+    name: "Prim's",
+    component: TableView,
+    props: {
+      algorithmClass: PrimsAlgorithm,
+    },
+    _info: {
+      category: "Graph",
+    },
+  },
+  {
+    path: "graph/floyd",
+    name: "Floyd's",
+    component: TableView,
+    props: {
+      algorithmClass: FloydsAlgorithm,
+      allow_infinity: true,
+      multi_table: true,
+    },
+    _info: {
+      category: "Graph",
+    },
+  },
+];
+
 export const algorithmRoutes = [
   ...sortRoutes,
+  ...graphRoutes,
 
   {
     path: "simplex",
@@ -23,14 +52,6 @@ export const algorithmRoutes = [
     component: SimplexView,
     _info: {
       category: "Simplex",
-    },
-  },
-  {
-    path: "graph/prim",
-    name: "Prim's",
-    component: TableView,
-    _info: {
-      category: "Graph",
     },
   },
 ];

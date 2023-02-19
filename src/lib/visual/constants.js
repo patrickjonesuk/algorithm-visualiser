@@ -11,10 +11,3 @@ export const HighlightColour = {
   WARNING: new Colour("#ffb86c", 1), // Dracula Orange
   FAILURE: new Colour("#ff5555", 1), // Dracula Red
 };
-
-export const Animation = {
-  List: {
-    ANIMATE_LEFT: "item-animate-left",
-    ANIMATE_RIGHT: "item-animate-right",
-  },
-};

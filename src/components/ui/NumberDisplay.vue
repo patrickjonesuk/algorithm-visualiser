@@ -1,7 +1,7 @@
 <template>
   <div class="number-display" :style="css">
     <span v-if="typeof number === 'number'">{{
-      isNaN(number) ? "" : number
+      isNaN(number) ? "" : number === Infinity ? "∞" : number
     }}</span>
     <template v-else-if="typeof number === 'string'">
       <template v-if="splitString">
@@ -42,7 +42,7 @@ export default {
       for (let i = 0; i < parts.length; i++) {
         if (i % 2 === 1) {
           const int = parseInt(parts[i]);
-          out.push(int !== NaN ? int : fraction(parts[i]));
+          out.push(!isNaN(int) ? int : fraction(parts[i]));
         } else if (parts[i] !== "") {
           out.push(parts[i]);
         }

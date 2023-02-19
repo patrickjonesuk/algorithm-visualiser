@@ -1,5 +1,10 @@
 import { Algorithm } from "@/lib/models";
-import { ListItem } from "./step"; // eslint-disable-line no-unused-vars
+import { OperationItem } from "@/lib/models";
+
+/**
+ * @extends OperationItem<Number>
+ */
+export class ListItem extends OperationItem {}
 
 export class ListAlgorithm extends Algorithm {
   constructor() {

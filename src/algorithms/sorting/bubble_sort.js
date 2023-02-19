@@ -1,17 +1,10 @@
 import {
   Direction, // eslint-disable-line no-unused-vars
   ListAlgorithm,
-  ListAlgorithmOperation,
   ListItem,
 } from "@/lib/targets/list";
-import {
-  Animation,
-  Border,
-  Highlight,
-  HighlightColour,
-  Tooltip,
-} from "@/lib/visual";
-import { Level } from "@/lib/levels";
+import { Border, Highlight, HighlightColour, Tooltip } from "@/lib/visual";
+import { Level } from "@/lib";
 import { compare } from "mathjs";
 
 /**
@@ -73,21 +66,16 @@ export class BubbleSort extends ListAlgorithm {
     if (level > Level.OPERATION || comparing) this.comparePair();
   }
 
-  /**
-   * @returns {ListAlgorithmOperation}
-   */
   comparePair() {
     this.operations++;
     const [a, b] = [this.list[this.idx], this.list[this.idx + 1]];
-    // const delta = a.value - b.value;
     const delta = compare(a.value, b.value);
-    const oldList = this.copyLists();
     this.list.forEach((item) => {
       item.tooltip = Tooltip.none();
       item.highlight = Highlight.none();
     });
     if (delta > 0 === this.direction) {
-      const [newA, newB] = [a, b].map((item, idx) => {
+      const [newA, newB] = [a, b].map((item) => {
         item.highlight = new Highlight(HighlightColour.SUCCESS, Border.none());
         item.tooltip = new Tooltip(
           "Items in wrong order, swapping",
@@ -103,7 +91,6 @@ export class BubbleSort extends ListAlgorithm {
       this.idx++;
     }
     this.comparing = false;
-    return new ListAlgorithmOperation(oldList, this.lists);
   }
 
   /**
