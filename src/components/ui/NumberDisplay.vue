@@ -3,24 +3,22 @@
     <span v-if="typeof number === 'number'">{{
       isNaN(number) ? "" : number === Infinity ? "∞" : number
     }}</span>
-    <template v-else-if="typeof number === 'string'">
-      <template v-if="splitString">
-        <NumberDisplay
-          v-for="(part, i) of parts"
-          :number="part"
-          :padding="'0px'"
-          :key="i"
-        />
-      </template>
-      <span class="text" v-else>
-        {{ number }}
-      </span>
-    </template>
-    <div v-else class="frac">
+    <div v-else-if="isFraction" class="frac">
       <span>{{ number.s === -1 ? "-" : "" }}{{ number.n }}</span>
       <span class="symbol">/</span>
       <span class="bottom">{{ number.d }}</span>
     </div>
+    <template v-else-if="splitString">
+      <NumberDisplay
+        v-for="(part, i) of parts"
+        :number="part"
+        :padding="'0px'"
+        :key="i"
+      />
+    </template>
+    <span class="text" v-else>
+      {{ number }}
+    </span>
   </div>
 </template>
 
@@ -34,15 +32,28 @@ export default {
       default: "0.8rem",
     },
   },
+  methods: {
+    stringParts() {
+      if (typeof this.number !== "string" && !!this.number.n) return [];
+      return this.number.toString().split("||");
+    },
+  },
   computed: {
+    isFraction() {
+      return !!this.number.n;
+    },
     parts() {
-      if (typeof this.number !== "string") return [];
-      const parts = this.number.split("||");
+      const parts = this.stringParts();
       const out = [];
       for (let i = 0; i < parts.length; i++) {
         if (i % 2 === 1) {
-          const int = parseInt(parts[i]);
-          out.push(!isNaN(int) ? int : fraction(parts[i]));
+          if (isNaN(parts[i])) {
+            try {
+              out.push(fraction(parts[i]));
+            } catch (e) {
+              out.push(parts[i]);
+            }
+          } else out.push(parseFloat(parts[i]));
         } else if (parts[i] !== "") {
           out.push(parts[i]);
         }
@@ -50,7 +61,7 @@ export default {
       return out;
     },
     splitString() {
-      return this.parts.length > 1;
+      return this.stringParts().length > 1;
     },
     css() {
       return {

@@ -12,12 +12,6 @@ import ToggleButton from "@/components/input/ToggleButton.vue";
       :options="['ascending', 'descending']"
       v-model:start_idx="direction"
     />
-    <!--
-    <ToggleButton
-      :options="['Bubble Sort', 'Quick Sort']"
-      v-model:start_idx="sortclass"
-    />
-    -->
   </div>
   <ListSort
     v-else
@@ -36,7 +30,6 @@ export default {
     return {
       stage: 0,
       direction: 0,
-      /* sortclass: 0, */
       inputs: [
         {
           fraction: false,

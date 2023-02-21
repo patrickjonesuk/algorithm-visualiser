@@ -1,6 +1,6 @@
 <template>
   <div v-if="!stage">
-    <simplex-input ref="input" :state="state" @start="start" />
+    <simplex-input :state="state" @start="start" />
   </div>
   <SingleTable v-else @new="stage--" :algorithm="simplex" />
 </template>
@@ -24,7 +24,9 @@ export default {
       this.simplex = new SimplexAlgorithm(
         this.state.num_vars,
         this.state.objective,
-        this.state.inequalities
+        this.state.inequalities,
+        this.state.minmax,
+        !!this.state.big_m
       );
       this.stage++;
     },

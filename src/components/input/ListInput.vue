@@ -1,4 +1,5 @@
 <template>
+  <input-info />
   <div class="container">
     <NumberInput
       v-for="(input, idx) in inputs"
@@ -48,9 +49,10 @@
 <script>
 import NumberInput from "./NumberInput.vue";
 import UIButton from "../ui/UIButton.vue";
+import InputInfo from "@/components/ui/InputInfo.vue";
 export default {
   emits: ["start"],
-  components: { NumberInput, UIButton },
+  components: { NumberInput, UIButton, InputInfo },
   props: {
     inputs: {
       default: [

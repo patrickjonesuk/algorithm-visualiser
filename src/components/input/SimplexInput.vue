@@ -1,8 +1,13 @@
 <template>
+  <input-info />
   <div class="wrapper">
     Variables: <UIButton @click="state.num_vars++">+</UIButton>
     <UIButton @click="state.num_vars > 0 ? state.num_vars-- : {}">-</UIButton>
     <div class="objective-wrapper">
+      <ToggleButton
+        :options="['Maximise', 'Minimise']"
+        v-model:start_idx="state.minmax"
+      />
       <span> P = </span>
       <div class="coeff" v-for="(vname, i) in varNames" :key="vname">
         <NumberInput class="num-input" :value="state.input_objective[i]" />{{
@@ -31,6 +36,13 @@
     <UIButton style="margin-bottom: 1rem; width: 5rem" @click="newIneq()"
       >+</UIButton
     >
+    <br />
+    <ToggleButton
+      v-if="state.input_inequalities.some((ineq) => ineq.direction === 1)"
+      style="margin-bottom: 1rem; min-width: 5rem"
+      :options="['Two stage', 'Big-M']"
+      v-model:start_idx="state.big_m"
+    />
     <hr />
     <UIButton class="uibtn" @click="this.$emit('start')">Start</UIButton>
     <UIButton
@@ -54,8 +66,9 @@ import {
 } from "../../algorithms";
 import NumberInput from "./NumberInput.vue";
 import ToggleButton from "./ToggleButton.vue";
+import InputInfo from "@/components/ui/InputInfo.vue";
 export default {
-  components: { UIButton, NumberInput, ToggleButton },
+  components: { UIButton, NumberInput, ToggleButton, InputInfo },
   emits: ["start"],
   props: ["state"],
   data() {

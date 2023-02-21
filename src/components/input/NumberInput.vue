@@ -135,23 +135,6 @@ export default {
       this.value.denominator = evt.target.value;
     },
 
-    ensureNumberOnly(el, { allow_slash = false } = {}) {
-      const lastCharIdx = el.value.length - 1;
-      const lastChar = el.value[lastCharIdx];
-      const penChar = el.value[lastCharIdx - 1];
-      const numRe = /[0-9.]/;
-      if (allow_slash && lastChar === "/") {
-        if (lastCharIdx === 0 || penChar === ".") {
-          el.value = el.value.slice(0, lastCharIdx);
-        }
-      } else if (
-        (lastCharIdx === 0 && lastChar === ".") ||
-        !lastChar.match(numRe) ||
-        el.value.split(".").length - 1 > 1
-      ) {
-        el.value = el.value.slice(0, lastCharIdx);
-      }
-    },
   },
 };
 </script>

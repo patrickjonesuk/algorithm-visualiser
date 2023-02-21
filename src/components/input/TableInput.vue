@@ -1,4 +1,5 @@
 <template>
+  <input-info :allow_infinity="allow_infinity" />
   <div class="wrapper">
     <table>
       <thead>
@@ -31,9 +32,6 @@
         </tr>
       </tbody>
     </table>
-    <span v-if="allow_infinity">
-      Press 'i' to insert a value of Infinity.<br />
-    </span>
     <UIButton class="btn" @click="newRow">+</UIButton>
     <UIButton class="btn" @click="$emit('reset')">Reset</UIButton>
   </div>
@@ -44,8 +42,9 @@ import { fractionObjectZero, TableItem } from "../../lib";
 import UIButton from "../ui/UIButton.vue";
 import { NODE_VAR_NAMES } from "@/algorithms";
 import NumberInput from "./NumberInput.vue";
+import InputInfo from "@/components/ui/InputInfo.vue";
 export default {
-  components: { UIButton, NumberInput },
+  components: { UIButton, NumberInput, InputInfo },
   props: {
     table: {},
     allow_infinity: {
@@ -82,7 +81,6 @@ export default {
 <style scoped>
 .wrapper {
   margin: 1rem;
-  overflow-x: scroll;
 }
 
 table {

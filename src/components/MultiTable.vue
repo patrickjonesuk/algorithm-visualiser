@@ -9,7 +9,6 @@
           :table="table"
           :row_headers="row_headers"
         />
-        <!--<algorithm-table class="table" :table="table" :row_headers="row_headers" />-->
       </li>
     </transition-group>
     <Transition>

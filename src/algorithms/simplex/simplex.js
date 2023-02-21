@@ -10,13 +10,16 @@ import {
   Table,
   TableItem,
   Tooltip,
+  MExpression,
 } from "@/lib";
 import {
   A_VAR_PREFIX,
+  INVERSE_OBJ_FUNC_VAR_NAME,
   MAX_ITERATIONS,
   OBJ_FUNC_VAR_NAME,
   OP_COL_NAME,
   ROW_OP_PLACEHOLDER,
+  SimplexObjective,
   S_VAR_PREFIX,
   THETA_COL_NAME,
   TS_S1_OBJ_FUNC_NAME,
@@ -27,6 +30,44 @@ import { Inequality, InequalityState } from "./inequalities";
 import { create, all } from "mathjs";
 
 export class SimplexAlgorithm extends SingleTableAlgorithm {
+  bigM_minValue() {
+    const obj_row = this.row(-1);
+    let low_i = 0,
+      low_v;
+    for (let i = 1; i < obj_row.length - 3; i++) {
+      if (low_i === 0 || obj_row[i].value.isLessThan(low_v)) {
+        low_i = i;
+        low_v = obj_row[i].value;
+      }
+    }
+    return [low_i, low_v];
+  }
+
+  choosePivotColumn() {
+    const obj_row = this.row(-1);
+    if (this.big_m) {
+      const [i, _] = this.bigM_minValue();
+      this.pivot_column_idx = i;
+    } else {
+      const min_value = this.math.min(
+        ...obj_row.slice(1, -3).map((item) => item.value)
+      );
+
+      this.pivot_column_idx = obj_row.findIndex(
+        (item) => item.value === min_value
+      );
+    }
+    obj_row[this.pivot_column_idx].highlight = new Highlight(
+      HighlightColour.PRIMARY,
+      Border.none()
+    );
+    obj_row[this.pivot_column_idx].tooltip = new Tooltip(
+      "Smallest negative coefficient in objective row",
+      HighlightColour.INFO,
+      Border.none()
+    );
+  }
+
   /**
    * @param {Level} level
    */
@@ -46,23 +87,7 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         this.step(Level.OPERATION);
     } else if (level === Level.OPERATION) {
       if (this.pivot_column_idx === -1) {
-        const obj_row = this.row(-1);
-        const min_value = this.math.min(
-          ...obj_row.slice(1, -3).map((item) => item.value)
-        );
-
-        this.pivot_column_idx = obj_row.findIndex(
-          (item) => item.value === min_value
-        );
-        obj_row[this.pivot_column_idx].highlight = new Highlight(
-          HighlightColour.PRIMARY,
-          Border.none()
-        );
-        obj_row[this.pivot_column_idx].tooltip = new Tooltip(
-          "Smallest negative coefficient in objective row",
-          HighlightColour.INFO,
-          Border.none()
-        );
+        this.choosePivotColumn();
       } else if (this.pivot_row_idx === -1) {
         const thetas = [];
         for (const row of this.table.rows.slice(1, -1)) {
@@ -122,15 +147,37 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         prevRow.forEach((item) => (item.highlight = Highlight.none()));
         const thisRow = this.row(this.operation_row_idx);
         const valueToZero = thisRow[this.pivot_column_idx].value;
-        const scalar = divideToFraction(
-          this.math.abs(valueToZero),
-          pivotRow[this.pivot_column_idx].value,
-          this.math
-        );
-        const add = this.math.isNegative(valueToZero);
+        let scalar, add;
+        let isM =
+          this.big_m && this.operation_row_idx === this.table.rows.length - 1;
+        if (isM) {
+          scalar = valueToZero.multiplyScalar(
+            multiplyToFraction(
+              divideToFraction(
+                1,
+                pivotRow[this.pivot_column_idx].value,
+                this.math
+              ),
+              -1,
+              this.math
+            )
+          );
+
+          add = false;
+        } else {
+          scalar = divideToFraction(
+            this.math.abs(valueToZero),
+            pivotRow[this.pivot_column_idx].value,
+            this.math
+          );
+          add = this.math.isNegative(valueToZero);
+        }
+        const scalar_format = isM
+          ? `(${scalar.toString()})`
+          : this.math.format(scalar);
         thisRow[thisRow.length - 1].value = `R${this.operation_row_idx}' -> R${
           this.operation_row_idx
-        } ${add ? "+" : "-"} ||${scalar}|| R${this.pivot_row_idx}'`;
+        } ${add ? "+" : "-"} ||${scalar_format}|| R${this.pivot_row_idx}'`;
         thisRow[thisRow.length - 1].tooltip = new Tooltip(
           "Add scalar multiple of pivot row to make pivot coefficient equal 0",
           HighlightColour.INFO,
@@ -138,27 +185,34 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
         );
         const slice = pivotRow.slice(1, -2);
         for (let i = 1; i <= slice.length; i++) {
-          const offset = multiplyToFraction(
-            pivotRow[i].value,
-            scalar,
-            this.math
-          );
           const oldValue = thisRow[i].value;
           thisRow[i].highlight = new Highlight(
             HighlightColour.SECONDARY,
             Border.none()
           );
-          const newValue = binaryOperationToFraction(
-            oldValue,
-            offset,
-            add ? this.math.add : this.math.subtract,
-            this.math
-          );
+
+          let offset;
+          if (isM) {
+            offset = scalar.multiplyScalar(pivotRow[i].value);
+          } else {
+            offset = multiplyToFraction(pivotRow[i].value, scalar, this.math);
+          }
+          const newValue = isM
+            ? oldValue.addExpr(offset)
+            : binaryOperationToFraction(
+                oldValue,
+                offset,
+                add ? this.math.add : this.math.subtract,
+                this.math
+              );
           thisRow[i].value = newValue;
           thisRow[i].tooltip = new Tooltip(
-            `${oldValue} ${add ? "+" : "-"} ${scalar} × ${
-              pivotRow[i].value
-            } = ${newValue}`,
+            `${oldValue.toString().split("||").join("")} ${
+              add ? "+" : "-"
+            } ${scalar.toString().split("||").join("")} × ${pivotRow[i].value
+              .toString()
+              .split("||")
+              .join("")} = ${newValue.toString().split("||").join("")}`,
             HighlightColour.INFO,
             Border.none()
           );
@@ -190,12 +244,17 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
     table.rows.slice(1).forEach((row) => (row[row.length - 1].value = "")); // clear theta-values
     table.rows.slice(1).forEach((row) => (row[row.length - 2].value = "")); // clear row operations
 
-    const min_value = this.math.min(
-      ...this.row(-1)
-        .slice(1, -3)
-        .map((item) => item.value)
-    );
-    if (this.math.largerEq(min_value, 0)) {
+    const min_value = this.big_m
+      ? this.bigM_minValue()[1]
+      : this.math.min(
+          ...this.row(-1)
+            .slice(1, -3)
+            .map((item) => item.value)
+        );
+    const minGte0 = this.big_m
+      ? min_value.isPositiveZero()
+      : this.math.largerEq(min_value, 0);
+    if (minGte0) {
       if (this.two_stage && this.stage === 1) {
         this.stage++;
         const iRow = this.row(-1);
@@ -228,7 +287,10 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
   }
 
   get stats() {
-    const stats = { Iterations: this.iterations, Version: "standard" };
+    const stats = {
+      Iterations: this.iterations,
+      Version: this.big_m ? "Big-M" : "Standard",
+    };
     if (this.two_stage)
       Object.assign(stats, { Version: "Two stage", Stage: this.stage });
     return stats;
@@ -238,8 +300,10 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
    * @param {Number} num_vars
    * @param {Number[]} objective
    * @param {Inequality[]} inequalities
+   * @param {SimplexObjective} direction
+   * @param {boolean} big_m
    */
-  constructor(num_vars, objective, inequalities) {
+  constructor(num_vars, objective, inequalities, direction, big_m) {
     super();
 
     this.math = create(all, {
@@ -250,9 +314,12 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
     this.inequality_state = new InequalityState();
 
     this.num_vars = num_vars;
+    this.direction = direction;
+
     this.objective = objective
       .slice(0, num_vars)
-      .map((x) => multiplyToFraction(x, -1, this.math)); // Change from P=ax+by to P-ax-by=0
+      // Change from P=ax+by to P-ax-by=0 or Q+ax+by=0
+      .map((x) => multiplyToFraction(x, [-1, 1][this.direction], this.math));
     this.inequalities = inequalities;
     this.inequalities.forEach(
       (ineq) => (ineq.coeffs = ineq.coeffs.slice(0, num_vars))
@@ -260,8 +327,10 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
     inequalities.forEach((x) => x.withState(this.inequality_state));
     this.inequality_state.i.splice(num_vars, VARIABLE_NAMES.length - num_vars);
 
+    this.big_m = big_m && this.inequality_state.a;
+
     /** @type {boolean} */
-    this.two_stage = this.inequality_state.a !== 0;
+    this.two_stage = this.inequality_state.a !== 0 && !this.big_m;
 
     /** @type {Number} */
     this.stage = 1;
@@ -315,18 +384,25 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
       .concat(
         new Array(this.inequality_state.s)
           .fill()
-          .map((_, i) => text_style(`${S_VAR_PREFIX}${i}`))
+          .map((_, i) => text_style(`${S_VAR_PREFIX}${i + 1}`))
       )
       .concat(
         new Array(this.inequality_state.a)
           .fill()
-          .map((_, i) => text_style(`${A_VAR_PREFIX}${i}`))
+          .map((_, i) => text_style(`${A_VAR_PREFIX}${i + 1}`))
       )
       .concat([VALUE_COL_NAME, THETA_COL_NAME, OP_COL_NAME].map(text_style));
 
-    this.header_column = new Array(this.inequality_state.s)
+    this.header_column = new Array(
+      this.inequality_state.s - this.inequality_state.a
+    )
       .fill()
-      .map((_, i) => text_style(`${S_VAR_PREFIX}${i}`));
+      .map((_, i) => text_style(`${S_VAR_PREFIX}${i + 1}`))
+      .concat(
+        new Array(this.inequality_state.a)
+          .fill()
+          .map((_, i) => text_style(`${A_VAR_PREFIX}${i + 1}`))
+      );
 
     const artificial_var_rows = this.header_column.map((_, i) =>
       this.inequalities[i].artificial_var
@@ -359,15 +435,48 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
       text_style(ROW_OP_PLACEHOLDER),
     ]);
 
-    const obj_row = [
-      text_style(OBJ_FUNC_VAR_NAME),
-      ...this.objective.map(TableItem.valueOnly),
-      ...new Array(this.inequality_state.s).fill().map(zero),
-      ...new Array(this.inequality_state.a).fill().map(zero),
-      TableItem.valueOnly(0),
-      zero(), // theta-value
-      text_style(ROW_OP_PLACEHOLDER),
-    ];
+    const obj_row = !this.big_m
+      ? [
+          text_style(
+            [OBJ_FUNC_VAR_NAME, INVERSE_OBJ_FUNC_VAR_NAME][this.direction]
+          ),
+          ...this.objective.map(TableItem.valueOnly),
+          ...new Array(this.inequality_state.s).fill().map(zero),
+          ...new Array(this.inequality_state.a).fill().map(zero),
+          TableItem.valueOnly(0),
+          zero(), // theta-value
+          text_style(ROW_OP_PLACEHOLDER),
+        ]
+      : // ----
+        [
+          text_style(
+            [OBJ_FUNC_VAR_NAME, INVERSE_OBJ_FUNC_VAR_NAME][this.direction]
+          ),
+          ...this.objective.map((coeff, i) =>
+            TableItem.valueOnly(
+              new MExpression(coeff, this.inequality_state.i[i], this.math)
+            )
+          ),
+          ...new Array(this.inequality_state.s)
+            .fill()
+            .map((_, i) =>
+              TableItem.valueOnly(
+                new MExpression(
+                  0,
+                  this.inequality_state.i[num_vars + i],
+                  this.math
+                )
+              )
+            ),
+          ...new Array(this.inequality_state.a)
+            .fill()
+            .map(() => TableItem.valueOnly(MExpression.zero(this.math))),
+          TableItem.valueOnly(
+            new MExpression(0, this.inequality_state.i_value, this.math)
+          ),
+          zero(), // theta-value
+          text_style(ROW_OP_PLACEHOLDER),
+        ];
     const i_row = this.two_stage
       ? [
           [
@@ -387,7 +496,7 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
       obj_row,
       ...i_row,
     ]);
-    this.tables = [this.initial_table];
+    this.tables = [this.initial_table.copyValues()];
   }
 
   /**
