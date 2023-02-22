@@ -44,7 +44,12 @@
       v-model:start_idx="state.big_m"
     />
     <hr />
-    <UIButton class="uibtn" @click="this.$emit('start')">Start</UIButton>
+    <UIButton
+      class="uibtn"
+      @contextmenu.prevent="copyToClipboard"
+      @click="this.$emit('start')"
+      >Start</UIButton
+    >
     <UIButton
       class="uibtn"
       @click="
@@ -58,6 +63,7 @@
 </template>
 
 <script>
+import { copyInputToClipboard } from "@/lib";
 import UIButton from "@/components/ui/UIButton.vue";
 import {
   Inequality,
@@ -67,6 +73,7 @@ import {
 import NumberInput from "./NumberInput.vue";
 import ToggleButton from "./ToggleButton.vue";
 import InputInfo from "@/components/ui/InputInfo.vue";
+import { printExample } from "@/algorithms";
 export default {
   components: { UIButton, NumberInput, ToggleButton, InputInfo },
   emits: ["start"],
@@ -80,6 +87,12 @@ export default {
     },
   },
   methods: {
+    copyToClipboard() {
+      copyInputToClipboard(
+        { state: this.state },
+        { display: true, description: printExample(this.state).join("<br>") }
+      );
+    },
     zero() {
       return { numerator: 0, denominator: null, value: 0, fraction: false };
     },

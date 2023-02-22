@@ -8,7 +8,7 @@ import {
 } from "@/lib/visual";
 import { byId } from "@/lib";
 import { Level } from "@/lib";
-import { compare } from "mathjs";
+import { larger } from "mathjs";
 
 /**
  * @exports
@@ -162,8 +162,8 @@ export class QuickSort extends ListAlgorithm {
       if (i === pivotIdx) {
         continue;
       }
-      const delta = compare(arr[i].value, pivotValue.value);
-      if (delta > 0 === this.direction) rhs.push(i);
+      if (larger(arr[i].value, pivotValue.value) === this.direction)
+        rhs.push(i);
       else lhs.push(i);
       [
         { list: lhs, msg: "Place to left of pivot" },

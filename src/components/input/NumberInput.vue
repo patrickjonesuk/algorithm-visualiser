@@ -38,6 +38,12 @@ export default {
     };
   },
   mounted() {
+    if (this.value.value === null) {
+      this.infinity = true;
+      this.value.numerator = Infinity;
+      this.value.value = Infinity;
+    }
+    this.value.value = this.inputValue;
     this.valueWatcher(this.value);
   },
   computed: {

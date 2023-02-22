@@ -26,25 +26,21 @@
     </button>
   </div>
   <div class="btn-container">
-    <UIButton class="btn" @click="start">start</UIButton>
-    <UIButton class="btn" @click="reset">Reset</UIButton>
     <UIButton
       class="btn"
-      @click="
-        [10, 12, 9, 8, 7, 6, 5, 4, 3, 20, 2, 1, 15, 18].forEach((x) =>
-          this.inputs.push({
-            fraction: false,
-            numerator: x,
-            denominator: null,
-            value: x,
-          })
-        );
-        this.inputs.shift();
+      @click="start"
+      @contextmenu.prevent="
+        copyInputToClipboard({ list: inputs, direction: direction })
       "
-      >Test data</UIButton
+      >Start</UIButton
     >
+    <UIButton class="btn" @click="reset">Reset</UIButton>
   </div>
 </template>
+
+<script setup>
+import { copyInputToClipboard } from "@/lib";
+</script>
 
 <script>
 import NumberInput from "./NumberInput.vue";
@@ -64,6 +60,7 @@ export default {
         },
       ],
     },
+    direction: {},
   },
   methods: {
     reset() {

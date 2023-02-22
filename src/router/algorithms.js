@@ -23,6 +23,7 @@ const graphRoutes = [
     component: TableView,
     props: {
       algorithmClass: PrimsAlgorithm,
+      allow_infinity: true,
     },
     _info: {
       category: "Graph",

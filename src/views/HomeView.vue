@@ -66,13 +66,13 @@ export default {
 }
 .algorithm-container {
   display: flex;
+  flex-wrap: wrap;
 }
 .algorithm-item {
   border: 1px solid var(--rgbLine);
-  background-color: var(--rgbHeader);
   background-color: var(--rgbBackground);
   padding: 1rem;
-  margin: 1rem;
+  margin: 0.5rem;
   transition: 0.2s ease-in-out;
 }
 .algorithm-item:hover {

@@ -7,9 +7,9 @@ import ToggleButton from "@/components/input/ToggleButton.vue";
 
 <template>
   <div v-if="!stage">
-    <ListInput :inputs="inputs" @start="start" />
+    <ListInput :direction="direction" :inputs="inputs" @start="start" />
     <ToggleButton
-      :options="['ascending', 'descending']"
+      :options="['Ascending', 'Descending']"
       v-model:start_idx="direction"
     />
   </div>
@@ -23,6 +23,7 @@ import ToggleButton from "@/components/input/ToggleButton.vue";
 </template>
 
 <script>
+import { exampleObj } from "@/lib";
 export default {
   props: ["sortclass"],
   components: [ListSort, ListInput, ToggleButton],
@@ -39,6 +40,17 @@ export default {
         },
       ],
     };
+  },
+  async created() {
+    const { example } = this.$route.query;
+    const { input } = await exampleObj(
+      example,
+      this.$route.path.split("/").slice(-1)[0]
+    );
+    if (input) {
+      this.inputs = input.list;
+      this.direction = input.direction;
+    }
   },
   computed: {
     numbers() {

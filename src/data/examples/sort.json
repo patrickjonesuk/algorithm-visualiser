@@ -1,0 +1,208 @@
+{
+  "examples": [
+    {
+      "title": "L1",
+      "description": "Sort the following numbers into ascending order: 10, 12, 9, 8, 7, 6, 5, 4, 3, 20, 2, 1, 15, 18",
+      "tag": "",
+      "input": {
+        "direction": 0,
+        "list": [
+          {
+            "fraction": false,
+            "numerator": 10,
+            "denominator": null,
+            "value": 10
+          },
+          {
+            "fraction": false,
+            "numerator": 12,
+            "denominator": null,
+            "value": 12
+          },
+          {
+            "fraction": false,
+            "numerator": 9,
+            "denominator": null,
+            "value": 9
+          },
+          {
+            "fraction": false,
+            "numerator": 8,
+            "denominator": null,
+            "value": 8
+          },
+          {
+            "fraction": false,
+            "numerator": 7,
+            "denominator": null,
+            "value": 7
+          },
+          {
+            "fraction": false,
+            "numerator": 6,
+            "denominator": null,
+            "value": 6
+          },
+          {
+            "fraction": false,
+            "numerator": 5,
+            "denominator": null,
+            "value": 5
+          },
+          {
+            "fraction": false,
+            "numerator": 4,
+            "denominator": null,
+            "value": 4
+          },
+          {
+            "fraction": false,
+            "numerator": 3,
+            "denominator": null,
+            "value": 3
+          },
+          {
+            "fraction": false,
+            "numerator": 20,
+            "denominator": null,
+            "value": 20
+          },
+          {
+            "fraction": false,
+            "numerator": 2,
+            "denominator": null,
+            "value": 2
+          },
+          {
+            "fraction": false,
+            "numerator": 1,
+            "denominator": null,
+            "value": 1
+          },
+          {
+            "fraction": false,
+            "numerator": 15,
+            "denominator": null,
+            "value": 15
+          },
+          {
+            "fraction": false,
+            "numerator": 18,
+            "denominator": null,
+            "value": 18
+          }
+        ]
+      }
+    },
+    {
+      "title": "L2",
+      "description": "",
+      "display": false,
+      "input": {
+        "direction": 0,
+        "list": [
+          {
+            "fraction": true,
+            "numerator": "1",
+            "denominator": "2",
+            "value": {
+              "mathjs": "Fraction",
+              "n": 1,
+              "d": 2
+            }
+          },
+          {
+            "fraction": false,
+            "numerator": "7",
+            "denominator": null,
+            "value": 7
+          },
+          {
+            "fraction": false,
+            "numerator": "3",
+            "denominator": null,
+            "value": 3
+          },
+          {
+            "fraction": false,
+            "numerator": "2",
+            "denominator": null,
+            "value": 2
+          },
+          {
+            "fraction": false,
+            "numerator": "6",
+            "denominator": "",
+            "value": 6
+          },
+          {
+            "fraction": true,
+            "numerator": "5",
+            "denominator": "2",
+            "value": {
+              "mathjs": "Fraction",
+              "n": 5,
+              "d": 2
+            }
+          },
+          {
+            "fraction": false,
+            "numerator": "5",
+            "denominator": null,
+            "value": 5
+          }
+        ]
+      }
+    },
+    {
+      "title": "L3",
+      "description": "",
+      "display": false,
+      "input": {
+        "direction": 1,
+        "list": [
+          {
+            "fraction": false,
+            "numerator": "3",
+            "denominator": null,
+            "value": 3
+          },
+          {
+            "fraction": false,
+            "numerator": "6",
+            "denominator": null,
+            "value": 6
+          },
+          {
+            "fraction": false,
+            "numerator": "14",
+            "denominator": null,
+            "value": 14
+          },
+          {
+            "fraction": false,
+            "numerator": "2",
+            "denominator": null,
+            "value": 2
+          },
+          {
+            "fraction": true,
+            "numerator": "10",
+            "denominator": "3",
+            "value": {
+              "mathjs": "Fraction",
+              "n": 10,
+              "d": 3
+            }
+          },
+          {
+            "fraction": false,
+            "numerator": "8",
+            "denominator": null,
+            "value": 8
+          }
+        ]
+      }
+    }
+  ]
+}

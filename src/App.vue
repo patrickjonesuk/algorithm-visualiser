@@ -1,6 +1,10 @@
 <template>
   <HeaderPanel />
-  <RouterView />
+  <RouterView v-slot="{ Component, route }">
+    <transition name="slide">
+      <component :is="Component" :key="route.path" />
+    </transition>
+  </RouterView>
 </template>
 
 <script>
@@ -12,6 +16,19 @@ export default {
 </script>
 
 <style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-leave-active {
+  position: absolute;
+}
+.slide-enter-from {
+  transform: translateX(100%);
+}
+.slide-leave-to {
+  transform: translateX(-100%);
+}
 /* header { */
 /*   line-height: 1.5; */
 /*   max-height: 100vh; */

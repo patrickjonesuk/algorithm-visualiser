@@ -20,6 +20,11 @@ export default {
       idx: this.start_idx,
     };
   },
+  watch: {
+    start_idx(_new) {
+      this.idx = _new;
+    },
+  },
   methods: {
     click() {
       this.idx = ++this.idx % this.options.length;

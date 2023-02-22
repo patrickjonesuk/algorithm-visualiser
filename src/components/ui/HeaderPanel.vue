@@ -1,11 +1,25 @@
 <template>
   <div class="header">
-    <router-link class="link" to="/">Home</router-link>
+    <router-link
+      v-for="route in routes"
+      :key="route.name"
+      class="link"
+      :to="route.path"
+      >{{ route.name }}</router-link
+    >
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    routes() {
+      return this.$router.options.routes.filter(
+        (route) => route.includeInHeader
+      );
+    },
+  },
+};
 </script>
 
 <style>
@@ -24,9 +38,9 @@ export default {};
   border: 1px solid var(--rgbLine);
   padding: 1rem;
   background-color: var(--rgbHeader);
+  margin-right: 1rem;
 }
 .link:hover {
   filter: saturate(80%);
-  /* background-color: var(--rgbLine); */
 }
 </style>

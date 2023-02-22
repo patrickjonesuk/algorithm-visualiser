@@ -7,7 +7,11 @@
         :allow_infinity="allow_infinity"
       />
       <div class="control-buttons">
-        <UIButton @click="start">Start</UIButton>
+        <UIButton
+          @click="start"
+          @contextmenu.prevent="copyInputToClipboard({ table: table })"
+          >Start</UIButton
+        >
       </div>
     </div>
     <template v-else>
@@ -27,6 +31,10 @@
   </div>
 </template>
 
+<script setup>
+import { copyInputToClipboard } from "@/lib";
+</script>
+
 <script>
 import TableInput from "@/components/input/TableInput.vue";
 import { Table, TableItem, Tooltip, Highlight } from "@/lib";
@@ -35,6 +43,7 @@ import { NODE_VAR_NAMES } from "@/algorithms";
 import UIButton from "@/components/ui/UIButton.vue";
 import SingleTable from "@/components/SingleTable.vue";
 import MultiTable from "@/components/MultiTable.vue";
+import { exampleObj } from "@/lib";
 
 export default {
   components: { TableInput, UIButton, SingleTable, MultiTable },
@@ -46,6 +55,14 @@ export default {
       default: false,
     },
     algorithmClass: {},
+  },
+  async created() {
+    const { example } = this.$route.query;
+    const { input } = await exampleObj(
+      example,
+      this.$route.path.split("/").slice(-1)[0]
+    );
+    if (input) this.table.rows = input.table.rows;
   },
   data() {
     return {

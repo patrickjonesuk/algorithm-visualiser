@@ -8,9 +8,19 @@
 <script>
 import SingleTable from "@/components/SingleTable.vue";
 import SimplexInput from "@/components/input/SimplexInput.vue";
-import { SimplexAlgorithm, SimplexInputState } from "@/algorithms";
+import {
+  SimplexAlgorithm,
+  SimplexInputState,
+  processInputs,
+} from "@/algorithms";
+import { exampleObj } from "@/lib";
 export default {
   components: { SingleTable, SimplexInput },
+  async created() {
+    const { example } = this.$route.query;
+    const { input } = await exampleObj(example, "simplex");
+    if (input) this.state = input.state;
+  },
   data() {
     return {
       stage: 0,
@@ -20,7 +30,7 @@ export default {
   },
   methods: {
     start() {
-      this.state.processInputs();
+      processInputs(this.state);
       this.simplex = new SimplexAlgorithm(
         this.state.num_vars,
         this.state.objective,
