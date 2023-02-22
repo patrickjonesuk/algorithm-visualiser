@@ -8,13 +8,15 @@
         :row_headers="row_headers"
       />
     </transition-group>
-    <div
-      v-if="complete"
-      key="complete-banner"
-      :class="`${algorithm.failed ? 'failure' : 'complete'}-banner`"
-    >
-      {{ algorithm.end_message }}
-    </div>
+    <Transition>
+      <div
+        v-if="complete"
+        key="complete-banner"
+        :class="`${algorithm.failed ? 'failure' : 'complete'}-banner`"
+      >
+        {{ algorithm.end_message }}
+      </div>
+    </Transition>
   </algorithm-layout>
 </template>
 
@@ -122,5 +124,8 @@ export default {
 .list-of-tables {
   overflow-x: scroll;
   padding-left: 0;
+}
+.v-enter-from {
+  transform: translateY(-500%);
 }
 </style>

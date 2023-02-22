@@ -45,6 +45,7 @@ import NumberInput from "./NumberInput.vue";
 import InputInfo from "@/components/ui/InputInfo.vue";
 export default {
   components: { UIButton, NumberInput, InputInfo },
+  emits: ["reset"],
   props: {
     table: {},
     allow_infinity: {

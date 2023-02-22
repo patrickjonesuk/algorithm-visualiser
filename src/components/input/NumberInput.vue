@@ -134,7 +134,6 @@ export default {
 
       this.value.denominator = evt.target.value;
     },
-
   },
 };
 </script>
