@@ -31,10 +31,6 @@
   </div>
 </template>
 
-<script setup>
-import { copyInputToClipboard } from "@/lib";
-</script>
-
 <script>
 import TableInput from "@/components/input/TableInput.vue";
 import { Table, TableItem, Tooltip, Highlight } from "@/lib";
@@ -44,6 +40,7 @@ import UIButton from "@/components/ui/UIButton.vue";
 import SingleTable from "@/components/SingleTable.vue";
 import MultiTable from "@/components/MultiTable.vue";
 import { exampleObj } from "@/lib";
+import { copyInputToClipboard } from "@/lib";
 
 export default {
   components: { TableInput, UIButton, SingleTable, MultiTable },
@@ -69,6 +66,7 @@ export default {
       table: this.newTable(),
       algorithm: null,
       stage: 0,
+      copyInputToClipboard: copyInputToClipboard,
     };
   },
   methods: {
