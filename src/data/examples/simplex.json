@@ -3,7 +3,7 @@
     {
       "title": "S1",
       "description": "Maximise P = 20x + 30y<br>Subject to:<br>7x + 10y ≤ 80<br>x + 2y ≤ 12",
-      "display": true,
+      "display": false,
       "input": {
         "state": {
           "input_inequalities": [
@@ -170,7 +170,7 @@
     {
       "title": "S2",
       "description": "Maximise P = x + 2y + z<br>Subject to:<br>x + y + z ≤ 8<br>x + 3y + z ≤ 16<br>x + z ≤ 5",
-      "display": true,
+      "display": false,
       "input": {
         "state": {
           "input_inequalities": [
@@ -393,7 +393,7 @@
     {
       "title": "S3",
       "description": "Maximise P = x + 0.8y<br>Subject to:<br>x + y ≤ 1000<br>2x + y ≤ 1500<br>3x + 2y ≤ 2400",
-      "display": true,
+      "display": false,
       "input": {
         "state": {
           "input_inequalities": [
@@ -631,7 +631,7 @@
     {
       "title": "S4",
       "description": "Maximise P = 20x + 40y + 30z<br>Subject to:<br>x + y + z ≤ 3<br>0.(3)x + y + 1.5z ≤ 2.5<br>20x ≤ 55<br> + 40y + 30z ≤ 55",
-      "display": true,
+      "display": false,
       "input": {
         "state": {
           "input_inequalities": [
@@ -941,7 +941,7 @@
     {
       "title": "M1",
       "description": "Maximise P = 3x-2y + z<br>Subject to:<br>x + y + 2z ≤ 10<br>2x-3y + z ≥ 5<br>x + y ≥ 8",
-      "display": true,
+      "display": false,
       "tag": "",
       "input": {
         "state": {
@@ -1165,7 +1165,7 @@
     {
       "title": "M2",
       "description": "Maximise P = 9x + 10y + 6z<br>Subject to:<br>2x + 3y + 4z ≤ 3<br>6x + 6y + 2z ≤ 8<br>x + y + z ≥ 1",
-      "display": true,
+      "display": false,
       "input": {
         "state": {
           "input_inequalities": [
@@ -1388,7 +1388,7 @@
     {
       "title": "M3",
       "description": "Maximise P = 2x + 3t<br>Subject to:<br>x + y + z + t ≤ 150<br>x + 3y + 4z + 2t ≤ 200<br>xt ≤ 0<br> + y + z ≥ 50",
-      "display": true,
+      "display": false,
       "input": {
         "state": {
           "input_inequalities": [
@@ -1667,7 +1667,7 @@
     {
       "title": "M4",
       "description": "Minimise P = 3x + 5y<br>Subject to:<br>x + y ≤ 12<br>6x + 5y ≥ 60<br>2x + 3y ≤ 24",
-      "display": true,
+      "display": false,
       "input": {
         "state": {
           "input_inequalities": [
