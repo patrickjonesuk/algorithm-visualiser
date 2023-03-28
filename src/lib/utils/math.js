@@ -115,9 +115,9 @@ export class MExpression {
    * @returns {boolean}
    */
   isPositiveZero() {
-    if (this.math.isPositive(this.m)) return true;
     /** @ts-ignore @see isLessThan */
     if (this.math.equal(this.m, 0)) return this.math.largerEq(this.constant, 0);
+    return this.math.isPositive(this.m)
   }
 
   /**

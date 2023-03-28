@@ -163,7 +163,7 @@ export class SimplexAlgorithm extends SingleTableAlgorithm {
             )
           );
 
-          add = false;
+          add = !valueToZero.isPositiveZero()
         } else {
           scalar = divideToFraction(
             this.math.abs(valueToZero),
