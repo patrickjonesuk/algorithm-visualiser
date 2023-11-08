@@ -1,14 +1,8 @@
-# algorithm-visualiser-vue
+# algorithm-visualiser
+Visualise the process and output of several of the algorithms required by the [Edexcel A Level Further Mathematics](https://qualifications.pearson.com/content/dam/pdf/A%20Level/Mathematics/2017/specification-and-sample-assesment/a-level-l3-further-mathematics-specification.pdf) **Decision 1** option.
 
-This template should help get you started developing with Vue 3 in Vite.
+An instance can be accessed at [https://algorithm-visualiser.pages.dev](https://algorithm-visualiser.pages.dev)
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
